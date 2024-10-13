@@ -1,7 +1,18 @@
 package gustavo.cadastro.models;
 
+import java.util.Collection;
+import java.util.List;
+
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+
+import gustavo.cadastro.Dtos.UserDto;
+import jakarta.persistence.CollectionTable;
 import jakarta.persistence.Column;
+import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -15,15 +26,15 @@ import lombok.Setter;
 @NoArgsConstructor
 @Setter
 @Getter
-public class User {
+public class User implements UserDetails {
   @Id
   @GeneratedValue(strategy = GenerationType.UUID)
   private String id;
 
-  @Column(length = 60, nullable = false)
+  @Column(length = 60, nullable = false, unique = true)
   private String userName;
 
-  @Column(length = 30, nullable = false)
+  @Column(length = 30, nullable = false, unique = true)
   private String email;
 
   @JoinColumn(name = "department_id")
@@ -32,4 +43,27 @@ public class User {
 
   @Column(length = 150, nullable = false)
   private String password;
+
+  @Column()
+  private Roles role;
+
+  public User(UserDto data) {
+    this.email = data.email();
+    this.userName = data.userName();
+    this.password = data.password();
+    this.role = data.role();
+  }
+
+  @Override
+  public Collection<? extends GrantedAuthority> getAuthorities() {
+    if (this.role == Roles.ADMIN)
+      return List.of(new SimpleGrantedAuthority("ROLE_ADMIN"), new SimpleGrantedAuthority("ROLE_USER"));
+    else
+      return List.of(new SimpleGrantedAuthority("ROLE_USER"));
+  }
+
+  @Override
+  public String getUsername() {
+    return this.userName;
+  }
 }
