@@ -7,4 +7,6 @@ import gustavo.cadastro.models.User;
 
 public interface UserRepository extends JpaRepository<User, String> {
   UserDetails findByEmail(String email);
+
+  UserDetails findByUserName(String username);
 }

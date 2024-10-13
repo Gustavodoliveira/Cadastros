@@ -7,12 +7,9 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import gustavo.cadastro.Dtos.UserDto;
-import jakarta.persistence.CollectionTable;
+import gustavo.cadastro.Dtos.Users.RegisterUserDto;
 import jakarta.persistence.Column;
-import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -47,10 +44,17 @@ public class User implements UserDetails {
   @Column()
   private Roles role;
 
-  public User(UserDto data) {
+  public User(RegisterUserDto data) {
     this.email = data.email();
     this.userName = data.userName();
     this.password = data.password();
+    this.role = data.role();
+  }
+
+  public User(RegisterUserDto data, String encryptedPassword) {
+    this.email = data.email();
+    this.userName = data.userName();
+    this.password = encryptedPassword;
     this.role = data.role();
   }
 
