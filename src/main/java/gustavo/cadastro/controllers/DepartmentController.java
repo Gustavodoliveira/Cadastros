@@ -21,7 +21,7 @@ public class DepartmentController {
   @PostMapping
   private ResponseEntity postDepartment(@RequestBody DepartmentDto data) {
     Department newDepartment = new Department(data);
-    // repository.save(newDepartment);
+    repository.save(newDepartment);
     return ResponseEntity.ok().body(newDepartment);
   }
 
