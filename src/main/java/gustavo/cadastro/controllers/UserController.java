@@ -5,8 +5,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -15,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 import gustavo.cadastro.Dtos.Users.LoginResponseDto;
 import gustavo.cadastro.Dtos.Users.LoginUserDto;
 import gustavo.cadastro.Dtos.Users.RegisterUserDto;
+import gustavo.cadastro.Dtos.Users.UpdateUserDto;
 import gustavo.cadastro.infra.security.TokenService;
 import gustavo.cadastro.models.User;
 import gustavo.cadastro.services.UserService;
@@ -46,5 +49,11 @@ public class UserController {
   private ResponseEntity getUsers() {
     List<User> users = userService.getUsers();
     return ResponseEntity.ok().body(users);
+  }
+
+  @PatchMapping
+  ResponseEntity updateUser(@RequestBody @Validated UpdateUserDto data) {
+    UserDetails user = userService.updateUser(data);
+    return ResponseEntity.ok().body(user);
   }
 }

@@ -5,11 +5,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import gustavo.cadastro.Dtos.Users.LoginUserDto;
 import gustavo.cadastro.Dtos.Users.RegisterUserDto;
+import gustavo.cadastro.Dtos.Users.UpdateUserDto;
 import gustavo.cadastro.infra.security.TokenService;
 import gustavo.cadastro.models.User;
 import gustavo.cadastro.repository.UserRepository;
@@ -40,5 +42,9 @@ public class UserService {
 
   public List<User> getUsers() {
     return repository.findAll();
+  }
+
+  public UserDetails updateUser(UpdateUserDto data) {
+    return repository.findByEmail(data.email());
   }
 }
