@@ -12,12 +12,23 @@ import org.springframework.stereotype.Service;
 import gustavo.cadastro.Dtos.Users.LoginUserDto;
 import gustavo.cadastro.Dtos.Users.RegisterUserDto;
 import gustavo.cadastro.Dtos.Users.UpdateUserDto;
+import gustavo.cadastro.infra.security.FilterSecurity;
 import gustavo.cadastro.infra.security.TokenService;
 import gustavo.cadastro.models.User;
 import gustavo.cadastro.repository.UserRepository;
+import jakarta.servlet.http.HttpServletRequest;
 
 @Service
 public class UserService {
+  @Autowired
+  private TokenService tokenService;
+
+  @Autowired
+  HttpServletRequest req;
+
+  @Autowired
+  FilterSecurity filterSecurity;
+
   @Autowired
   private UserRepository repository;
 
@@ -44,7 +55,28 @@ public class UserService {
     return repository.findAll();
   }
 
-  public UserDetails updateUser(UpdateUserDto data) {
-    return repository.findByEmail(data.email());
+  public User updateUser(UpdateUserDto data) {
+    String token = filterSecurity.recoverToken(this.req);
+    String userName = tokenService.validateToken(token);
+    System.out.println(userName);
+    User user = repository.findByEmail(userName);
+    User userUpdate = new User();
+
+    if (data.email().isEmpty())
+      userUpdate.setEmail(user.getEmail());
+    else
+      userUpdate.setEmail(data.email());
+
+    if (data.userName() == null)
+      userUpdate.setUserName(user.getUsername());
+    else
+      userUpdate.setUserName(data.userName());
+
+    if (data.newPassword().isEmpty())
+      userUpdate.setPassword(user.getPassword());
+    else
+      userUpdate.setPassword(data.newPassword());
+
+    return userUpdate;
   }
-}
+};

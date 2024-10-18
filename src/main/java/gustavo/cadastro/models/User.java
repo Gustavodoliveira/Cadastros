@@ -34,7 +34,7 @@ public class User implements UserDetails {
   @Column(length = 30, nullable = false, unique = true)
   private String email;
 
-  @JoinColumn(name = "department_id")
+  @JoinColumn(name = "department_name")
   @OneToOne
   private Department department;
 

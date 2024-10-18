@@ -6,7 +6,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import gustavo.cadastro.models.User;
 
 public interface UserRepository extends JpaRepository<User, String> {
-  UserDetails findByEmail(String email);
+  User findByEmail(String email);
 
   UserDetails findByUserName(String username);
 }
