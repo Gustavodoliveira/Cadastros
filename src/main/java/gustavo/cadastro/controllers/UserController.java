@@ -7,6 +7,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -55,5 +56,11 @@ public class UserController {
   ResponseEntity updateUser(@RequestBody @Validated UpdateUserDto data) {
     UserDetails user = userService.updateUser(data);
     return ResponseEntity.ok().body(user);
+  }
+
+  @DeleteMapping
+  ResponseEntity deleteUser() {
+    String resp = userService.DeleteUser();
+    return ResponseEntity.ok().body(resp);
   }
 }

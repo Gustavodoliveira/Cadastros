@@ -58,9 +58,10 @@ public class UserService {
   public User updateUser(UpdateUserDto data) {
     String token = filterSecurity.recoverToken(this.req);
     String userName = tokenService.validateToken(token);
-    System.out.println(userName);
     User user = repository.findByEmail(userName);
     User userUpdate = new User();
+
+    userUpdate.setRole(user.getRole());
 
     if (data.email().isEmpty())
       userUpdate.setEmail(user.getEmail());
@@ -77,6 +78,18 @@ public class UserService {
     else
       userUpdate.setPassword(data.newPassword());
 
+    repository.updateUser(userUpdate.getEmail(), userUpdate.getUsername(), userUpdate.getPassword(),
+        userName);
+
     return userUpdate;
+  }
+
+  public String DeleteUser() {
+    String token = filterSecurity.recoverToken(this.req);
+    String userName = tokenService.validateToken(token);
+    User user = repository.findByEmail(userName);
+    repository.deleteById(user.getId());
+
+    return "Delete success";
   }
 };
