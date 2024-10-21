@@ -23,4 +23,9 @@ public class DepartmentService {
     repository.updateDepartment(data.department(), data.salary(), id);
     return "update department success";
   }
+
+  public String deleteDepartment(Integer id) {
+    repository.deleteById(id);
+    return "delete department success";
+  }
 }

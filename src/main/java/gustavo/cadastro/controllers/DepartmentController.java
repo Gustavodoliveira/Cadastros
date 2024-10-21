@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import java.util.*;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -43,6 +44,12 @@ public class DepartmentController {
   @PatchMapping("/{id}")
   private ResponseEntity updateDepartment(@PathVariable Integer id, @RequestBody @Validated UpdateDepartmentDto data) {
     String resp = service.updateDepartment(data, id);
+    return ResponseEntity.ok(resp);
+  }
+
+  @DeleteMapping("/{id}")
+  private ResponseEntity deleteDepartment(@PathVariable Integer id) {
+    String resp = service.deleteDepartment(id);
     return ResponseEntity.ok(resp);
   }
 
